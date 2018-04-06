@@ -244,10 +244,14 @@ contour", pointOfContourForChannel]];
   Table[DxDyFind[point, dxdy], {point, pointOfContourForChannel}]
 ]
 
-DxDyFind[point1_, point2_] := Module[{angle, l},
-  angle = N[VectorAngle[point1, point2]];
-  l = EuclideanDistance[{0, 0}, point2];
-  {-l*Cos[angle], l*Sin[angle]}
+
+
+DxDyFind[point1_, point2_] := Module[{angle, l,res},
+  If[point2!={0,0},
+    angle = Abs[N[VectorAngle[point1, point2]]];
+    l = EuclideanDistance[{0, 0}, point2];
+    res = {-l*Cos[angle], l*Sin[angle]},
+    res = {0,0}]
 ]
 
 End[] (* `Private` *)

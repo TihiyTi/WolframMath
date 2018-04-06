@@ -31,12 +31,15 @@ Needs["SphereMovingFunction`"]
 
 (*Функция нахождения перемещения эквивалентной сферы *)
 (*Методы - sistoleMethod: None, ValveMove*)
-(*Методы - eqSphereMethod: Use_Contour, Use_Contour_Radius, Use_Contour_Center,
+(*Методы - eqSphereMethod: Use_Contour, Use_Contour_Radius, Use_Contour_Center, Use_Contour_MassCenter,
                            Use_Contour_Verb, Use_Contour_Radius_Verb, Use_Contour_Center_Verb *)
 EqualSphereMoveModelling::sistoleMethod = "Описание функции";
-EqualSphereMoveModelling[] := Message[EqualSphereMoveModelling::boole];
-EqualSphereMoveModelling[name_, sistoleMethod_, eqSphereMethod_, verbose_] := Module[{
-  contur = HeartContours[name], move = HeartEdgeMove5point[name],
+EqualSphereMoveModelling[] := Message[EqualSphereMoveModelling::sistoleMethod];
+EqualSphereMoveModelling[name_, sistoleMethod_, eqSphereMethod_, verbose_]:= EqualSphereMoveModelling[name, sistoleMethod, eqSphereMethod, False, verbose]
+EqualSphereMoveModelling[name_, sistoleMethod_, eqSphereMethod_, isUseAtrium_, verbose_] := Module[{
+  (*contur = HeartContours[name], move*)
+  contur = If[isUseAtrium, HeartContoursWithAtrial[name], HeartContours[name]],
+  move = If[isUseAtrium, HeartEdgeMove5point[name]~Join~{0, 0, 0, 0}, HeartEdgeMove5point[name]],
   valveMove = ValveMove[name], rByMriVolume = RbyMRIbyVolume[name]
   sistoleContour,
   circleDiastole, circleSistole, centerMove,
@@ -52,9 +55,10 @@ EqualSphereMoveModelling[name_, sistoleMethod_, eqSphereMethod_, verbose_] := Mo
   view2 = Graphics[{Blue, Circle[circleDiastole[[1]],circleDiastole[[2]]],  Point[circleDiastole[[1]]]  }];
   view3 = Graphics[{Orange, Circle[circleSistole[[1]],circleSistole[[2]]], Point[circleSistole[[1]]]     }];
   If[verbose,
+    minX = Min[Transpose[contur][[1]]];
     Print["Move by MRI: ", move];
     Print["Diastole and sistole contour"];
-    Print[Show[view, view2, view3]];
+    Print[Show[view, view2, view3, PlotRange->{{-40,70},{-60,40}}, AspectRatio->1]];
     Print["Diastole sphere ", circleDiastole, ";   Sistole sphere ", circleSistole];
     Print["Center sphere moving = ", centerMove]
   ];

@@ -32,8 +32,16 @@ EqualSphere::usage = ""
 EqSphNMCenterRadius::usage = ""
 EqSphNMRadius::usage = ""
 EqSphNMCenter::usage = ""
+EqSphMassCenter::usage = ""
+
+(*Возвращает локальные для каждого канала координаты центра сферы, аппроксимирующей контур*)
+CircleRadiusByContourSqr::usage = ""
+AbsolutSphereXYinLocalChannel::usage = ""
 
 Begin["`Private`"]
+
+Needs["VolumeCalc`"]
+Needs["RadialEvaluation`"]
 
 ReqForHeart[Vmri_] := N[CubeRoot[2*3*Vmri/(0.6*4*Pi)]]*10;
 
@@ -96,6 +104,8 @@ EqualSphere::boole = "Use one of those method:
   		Use_Contour,
   		Use_Contour_Radius,
       Use_Contour_Center,
+      Use_Contour_MassCenter,
+      --------
       Use_Contour_Verb,
   		Use_Contour_Radius_Verb,
       Use_Contour_Center_Verb
@@ -103,10 +113,12 @@ EqualSphere::boole = "Use one of those method:
 EqualSphere[contour_, method_, radiusIfNeed_]:= Module[{result},
   result = Switch[method,
     "Use_Contour",              EqSphNMCenterRadius[contour],
-    "Use_Contour_Verb",         EqSphNMCenterRadius[contour, True],
     "Use_Contour_Radius",       EqSphNMRadius[contour, MassCenterContour[contour]],
-    "Use_Contour_Radius_Verb",  EqSphNMRadius[contour, MassCenterContour[contour], True],
     "Use_Contour_Center",     EqSphNMCenter[contour, radiusIfNeed],
+    "Use_Contour_MassCenter", EqSphMassCenter[contour],
+
+    "Use_Contour_Verb",         EqSphNMCenterRadius[contour, True],
+    "Use_Contour_Radius_Verb",  EqSphNMRadius[contour, MassCenterContour[contour], True],
     "Use_Contour_Center_Verb",EqSphNMCenter[contour, radiusIfNeed, True],
     _,                        Message[EqualSphere::boole, method]
   ];
@@ -150,6 +162,28 @@ EqSphNMCenter[contour_, radius_, verbose_]:= Module[{res, view},
   (*Print[view];*)
   {res,view}
 ]
+(*Нахождение эквивалентной сферы по контуру: цетр сферы*)
+EqSphMassCenter[contour_]:=Module[{center, radius},
+  center = MassCenterContour[contour];
+  radius = CircleRadiusByContourSqr[contour];
+  {center,radius}
+]
+
+
+(*Возвращает локальные для каждого канала координаты центра сферы, аппроксимирующей контур*)
+AbsolutSphereXYinLocalChannel[name_]:=Module[{contur = HeartContours[name], channelPoint, rByMriVolume = RbyMRIbyVolume[name], circleDiastole, center, newCent,shiftX, newCentInLocale},
+  circleDiastole = EqualSphere[contur, "Use_Contour", rByMriVolume];
+  channelPoint = Drop[Drop[contur,1],-1];
+  center = circleDiastole[[1]];
+  newCent = Table[DxDyFind[point, center], {point, channelPoint}];
+  shiftX = {40,40,50,50,40};
+  newCentInLocale = Table[{newCent[[i,1]] + shiftX[[i]],newCent[[i,2]]}, {i, Length[shiftX]}];
+  {contur, channelPoint, circleDiastole, center, newCent, newCentInLocale};
+  newCentInLocale
+]
+
+(*Находит радус окружности аппроксирующей контур из услояравнства площадей контура и окружности*)
+CircleRadiusByContourSqr[contour_] := N[Sqrt[Area[Polygon[contour]]/Pi]]
 
 End[] (* `Private` *)
 
