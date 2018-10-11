@@ -1,6 +1,7 @@
 (* Mathematica Init file    *)
 (* Created by Mathematica Plugin for IntelliJ IDEA *)
-Get["MathematicaIDEA`MathematicaIDEA`"]
+(*Get["MathematicaIDEA`MathematicaIDEA`"]*)
+
 Get["Models.m"]
 
 Get["ModelFinders.m"]
@@ -11,6 +12,7 @@ Get["SphereMovingFunction.m"]
 
 (*History data*)
 Get["history/MRIdata.m"]
+Get["history/IMPdata.m"]
 Get["EqualSphereMoveModellingLib.m"]
 
 (*Utils*)
