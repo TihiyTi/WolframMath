@@ -18,6 +18,8 @@ OneLayerModel::usage = "One layer model, OneLayerModel [\[Rho]1, a, b]";
 TwoLayerModel::usage = "Two layer model, TwoLayerModel [\[Rho]1, \[Rho]2, h, a, b]";
 SphereModel::usage = "SphereModel[\[Rho]1_,\[Rho]2_,a_,b_,R_,h_,x_,y_]";
 
+SphereInfluence::usage = "SphereInfluence[\[Rho]1,\[Rho]2,a,b,R,h,x,y]"
+
 Begin["`Private`"]
 
 OneLayerModel[\[Rho]1_, a_, b_] := (\[Rho]1*2*b)/(\[Pi] (a^2 - b^2));

@@ -13,6 +13,8 @@
 (* :Discussion: *)
 
 BeginPackage["RadialEvaluation`"]
+
+Needs["HelpInit`"]
 (* Exported symbols added here with SymbolName::usage *)
 (*todo вынести GetAlexRadial и GetAlexParam в модуль с исходными данными*)
 GetIvanRadial::usage = "Get Ivan Radial data:
@@ -34,7 +36,7 @@ GetAlexParam::usage = "Get Alex radial parameters: {param1,...}";
 GetParam::usage = "Get radial parameters: {param1,...}";
 GetAlexParamV1::usage = "Get Alex radial parameters: {param1,...}/ Use in RadEvalMethod1V1";
 
-RadEvalMethod1::usage =  "calc moving simple methods
+RadEvalMethod1::usage =  DocImport["RadEvalMethod1"]<>" calc moving simple methods
      Example: RadEvalMethod1[GetAlexRadial[], GetAlexParam[]]";
 RadEvalMethod2::usage = "calc moving with first layer filtering methods";
 RadEvalMethod3::usage = "calc moving with

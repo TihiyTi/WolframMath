@@ -17,7 +17,7 @@ BeginPackage["MRIdata`"]
 
 ValveMove::usage = "Data of valve moving by MRI data"
 RbyMRIbyVolume::usage = ""
-HeartContoursWithAtrial::usage = ""
+HeartContoursWithAtrial::usage = "Return array of 2D points - contour of the heart "
 AtrialPoints::usage = ""
 
 GetNewParam::usage = ""

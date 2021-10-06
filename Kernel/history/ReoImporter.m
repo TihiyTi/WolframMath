@@ -14,9 +14,11 @@
 
 BeginPackage["ReoImporter`"]
 (* Exported symbols added here with SymbolName::usage *)
+Forma0Reo32::usage = "Get list of signal intervals"
 Forma1Reo32::usage = ""
 Forma1Reo32Print::usage = ""
 SimpleExport::usage = ""
+EcgReo32::usage = "System function"
 
 Begin["`Private`"]
 
@@ -74,6 +76,12 @@ Forma1Reo32[filePath_, pattern_] := Module[{res, rr, otrezki, forma1},
   rr = GetR[EcgReo32[res]];
   otrezki = Transpose[Map[Reo32Cutter[#, rr] &, res]];
   forma1 = Map[Forma1FromCicle[#,pattern]&, otrezki]
+];
+Forma0Reo32[filePath_] := Module[{res, rr, otrezki, forma1},
+  Print["FILE = ",filePath];
+  res = Reo32Import[filePath];
+  rr = GetR[EcgReo32[res]];
+  otrezki = Transpose[Map[Reo32Cutter[#, rr] &, res]]
 ];
 Forma1Reo32Print[forms_] := Map[ListLinePlot[#[[1]]] &, forms];
 

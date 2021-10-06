@@ -73,7 +73,7 @@ FindHSphere[Zb_, ro1_, ro2_, a_, b_, R_, x_, y_] := Module[{plist},
 FindRoSphere[Zb_, ro2_, a_, b_, R_, h_, x_, y_] := Module[{plist},
   plist =
       Partition[
-        Table[{i, SphereModel[i, ro2, a, b, R, h, x, y]}, {i, 0.1, 15,
+        Table[{i, SphereModel[i, ro2, a, b, R, h, x, y]}, {i, 0.1, 50,
           0.05}], 2, 1];
   Flatten[Select[plist, And[#[[1, 2]] <= Zb, #[[2, 2]] >= Zb] &], 1][[
       1, 1]]
